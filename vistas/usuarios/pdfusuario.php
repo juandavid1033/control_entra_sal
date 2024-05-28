@@ -86,7 +86,6 @@ function generarPDF($conexion, $documento)
                     <th style='width: 8%'>Código de Barras</th>
                     <th style='width: 8%'>Rol</th>
                     <th style='width: 8%'>Tipo de Documento</th>
-                    <th style='width: 10%'>Foto</th>
                     <th style='width: 8%'>Fecha Entrada</th>
                     <th style='width: 8%'>Fecha Salida</th>
                 </tr>
@@ -115,7 +114,6 @@ function generarPDF($conexion, $documento)
                     <td>{$resultado['codigo_barras']}</td>
                     <td>{$nombre_rol}</td>
                     <td>{$nombre_tipo_documento}</td>
-                    <td>{$resultado['foto']}</td>
                     <td>{$resultado['entrada_fecha_hora']}</td>
                     <td>{$resultado['salida_fecha_hora']}</td>
                 </tr>";
