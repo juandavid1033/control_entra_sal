@@ -14,21 +14,51 @@ if (isset($_SESSION['documento'])) {
         // Conectar a la base de datos
         $conn = $db->conectar();
 
+        // Obtener el documento del usuario de la sesión
         $documento = $_SESSION['documento'];
 
-        $sql = "SELECT u.*, r.nom_rol AS rol_nombre, td.nom_doc AS tipo_documento_nombre, e.nom_estado AS estado_nombre
+        // Consulta SQL para obtener los datos del usuario y unir con las tablas relacionadas
+        $sql = "SELECT u.*, r.nom_rol AS rol, td.nom_doc AS tipo_documento, e.nom_estado AS estado
                 FROM usuario u
                 LEFT JOIN rol r ON u.id_rol = r.id_rol
                 LEFT JOIN tipo_documento td ON u.id_tipo_documento = td.id_tipo_documento
                 LEFT JOIN estados e ON u.id_estados = e.id_estados
                 WHERE u.documento = ?";
+        
+        // Preparar la consulta SQL
         $stmt = $conn->prepare($sql);
+        // Ejecutar la consulta con el documento del usuario
         $stmt->execute([$documento]);
+        // Obtener los resultados de la consulta como un array asociativo
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Mapeo de números a nombres para el campo "Tipo de Entrada"
+        $tipoEntradaMap = [
+            1 => 'Entrada',
+            2 => 'Salida'
+            // Agregar más mapeos según sea necesario
+        ];
+
+        // Mapeo de números a nombres para el campo "Estado"
+        $estadoMap = [
+            1 => 'Activo',
+            2 => 'Inactivo'
+            // Agregar más mapeos según sea necesario
+        ];
+
+        // Reemplazar los números con los nombres correspondientes
+        if (isset($userData['tipo_entrada']) && isset($tipoEntradaMap[$userData['tipo_entrada']])) {
+            $userData['tipo_entrada'] = $tipoEntradaMap[$userData['tipo_entrada']];
+        }
+        if (isset($userData['estado']) && isset($estadoMap[$userData['estado']])) {
+            $userData['estado'] = $estadoMap[$userData['estado']];
+        }
+
     } catch (PDOException $e) {
+        // Mostrar un mensaje de error si ocurre una excepción
         echo 'Error al obtener los datos del usuario: ' . $e->getMessage();
     } finally {
-        // Cerrar la conexión
+        // Cerrar la conexión a la base de datos
         $conn = null;
     }
 }
@@ -129,10 +159,23 @@ if (isset($_SESSION['documento'])) {
                     <th>Valor</th>
                 </tr>
                 <?php foreach ($userData as $key => $value): ?>
-                    <?php if (!in_array($key, ['id_rol', 'id_tipo_documento', 'id_estados', 'contrasena'])): ?>
+                    <?php 
+                    // Excluir ciertos campos de ser mostrados en la tabla
+                    if (!in_array($key, ['id_rol', 'id_tipo_documento', 'id_estados', 'contrasena', 'foto', 'codigo_barras'])): ?>
                         <tr>
                             <td><?php echo ucwords(str_replace('_', ' ', $key)); ?>:</td>
-                            <td><?php echo htmlspecialchars($value); ?></td>
+                            <td>
+                                <?php 
+                                // Reemplazar los números con los nombres correspondientes
+                                if ($key === 'tipo_entrada' && isset($tipoEntradaMap[$value])) {
+                                    echo $tipoEntradaMap[$value];
+                                } elseif ($key === 'estado' && isset($estadoMap[$value])) {
+                                    echo $estadoMap[$value];
+                                } else {
+                                    echo htmlspecialchars($value);
+                                }
+                                ?>
+                            </td>
                         </tr>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -140,13 +183,13 @@ if (isset($_SESSION['documento'])) {
                     <tr>
                         <td>Código de Barras:</td>
                         <td><img src="../images/<?php echo $userData["codigo_barras"]; ?>.png" alt="Código de Barras" style="max-width: 100px; height: auto;"></td>
-
                     </tr>
                 <?php endif; ?>
             </table>
             <div class="btn-container">
-                <a class="btn btn-success" href="excelusuario.php">Exportar a Excel</a>
+                <a class="btn btn-success" href="excelusuario.php">Export
                 <a class="btn btn-danger" href="pdfusuario.php">Descargar PDF</a>
+                <a class="btn btn-secondary" href="entradasalida.php?documento=<?php echo htmlspecialchars($documento); ?>">Ver Entrada y Salida</a>
                 <button type="button" onclick="location.href='../../index.html'" class="btn btn-secondary">Cerrar Sesión</button>
             </div>
         <?php else: ?>
@@ -155,3 +198,5 @@ if (isset($_SESSION['documento'])) {
     </div>
 </body>
 </html>
+
+
