@@ -185,7 +185,8 @@ if (isset($_SESSION['documento'])) {
                 <?php if (!empty($userData['codigo_barras'])): ?>
                     <tr>
                         <td>Código de Barras:</td>
-                        <td><img src="../images/<?php echo $userData["codigo_barras"]; ?>.png" alt="Código de Barras" style="max-width: 100px; height: auto;"></td>
+                        <td><img src="./../../images/<?= $userData["codigo_barras"] ?>.png" style="max-width: 300px; height: auto; border: 2px solid #ffffff;"><br><?= $userData["codigo_barras"] ?></td>
+
                     </tr>
                 <?php endif; ?>
             </table>
@@ -201,6 +202,3 @@ if (isset($_SESSION['documento'])) {
     </div>
 </body>
 </html>
-
-
-
