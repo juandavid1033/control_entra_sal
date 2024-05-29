@@ -46,7 +46,7 @@ if (isset($_POST["validar_V"])) {
             echo '<script>window.location="./usuario.php"</script>';
         } else if ($queryi) {
             echo '<script>alert ("DOCUMENTO YA EXISTEN // CAMBIELO//");</script>';
-            echo 'script>windows.location="usuario.php"</script>';
+            echo 'script>windows.location="./usuario.php"</script>';
         } else {
             $insertsql = $conex->prepare("INSERT INTO usuario(documento,codigo_barras,nombres,contrasena,id_rol,id_estados,correo,id_tipo_documento,nit_empresa) VALUES (?,?,?,?,?,?,?,?,?)");
             $insertsql->execute([$cedula, $cedula, $nombres, $incri, $rol, 1, $correo, $tipo, $nit_empresa]);
@@ -114,7 +114,8 @@ if (isset($_POST["validar_V"])) {
                                         </div>
                                         <div class="col-sm-6 mb-6 mb-sm-2">
                                             <label>Documento</label>
-                                            <input type="text" style="margin-bottom:5px;" class="form-control form-control-user" id="documento" name="documento" placeholder="Documento" required maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="validarDocumento(event)">
+                                            <input type="text" style="margin-bottom:5px;" class="form-control form-control-user" id="documento" name="documento" placeholder="Documento" required minlength="8" maxlength="11" pattern="\d{8,11}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                            <small class="form-text text-muted">El documento debe contener entre 8 y 11 números.</small>
                                         </div>
                                         <div class="col-sm-6 mb-3 mb-sm-2">
                                             <label>Nombres</label>
@@ -192,16 +193,6 @@ if (isset($_POST["validar_V"])) {
             input.value = ''; // Limpiar el campo
         }
     }
-
-    function validarDocumento(event) {
-        var input = event.target;
-        var documento = input.value;
-        // Verificar si el documento contiene solo números
-        if (!/^\d+$/.test(documento)) {
-            alert("El documento debe contener solo números.");
-            input.value = ''; // Limpiar el campo
-        }
-    }
     </script>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -210,3 +201,5 @@ if (isset($_POST["validar_V"])) {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 </body>
 </html>
+
+
