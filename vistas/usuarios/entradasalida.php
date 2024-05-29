@@ -14,15 +14,30 @@ if (isset($_SESSION['documento']) || isset($_GET['documento'])) {
         // Obtener el documento del usuario de la sesión o del parámetro GET
         $documento = isset($_GET['documento']) ? $_GET['documento'] : $_SESSION['documento'];
 
-        // Consulta SQL para obtener los datos de entrada y salida del usuario
+        // Obtener las fechas del formulario si están presentes
+        $fechaInicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : '';
+        $fechaFin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
+
+        // Consulta SQL básica
         $sql = "SELECT id_entrada_salida, entrada_fecha_hora, salida_fecha_hora, documento, tipo_entrada, id_placa, serial, estado
                 FROM entrada_salidas
                 WHERE documento = ?";
-        
+
+        // Agregar condiciones de fecha si están presentes
+        if ($fechaInicio && $fechaFin) {
+            $sql .= " AND entrada_fecha_hora BETWEEN ? AND ?";
+        }
+
         // Preparar la consulta SQL
         $stmt = $conn->prepare($sql);
-        // Ejecutar la consulta con el documento del usuario
-        $stmt->execute([$documento]);
+
+        // Ejecutar la consulta con los parámetros adecuados
+        if ($fechaInicio && $fechaFin) {
+            $stmt->execute([$documento, $fechaInicio . ' 00:00:00', $fechaFin . ' 23:59:59']);
+        } else {
+            $stmt->execute([$documento]);
+        }
+
         // Obtener los resultados de la consulta
         $entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -120,11 +135,32 @@ if (isset($_SESSION['documento']) || isset($_GET['documento'])) {
         .btn:hover {
             background-color: #007bff;
         }
+        .filter-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .filter-container input {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Reporte de Entrada y Salida</h1>
+        
+        <!-- Formulario para filtrar por fecha -->
+        <div class="filter-container">
+            <form method="GET" action="">
+                <input type="hidden" name="documento" value="<?php echo htmlspecialchars($documento); ?>">
+                <input type="date" name="fecha_inicio" value="<?php echo htmlspecialchars($fechaInicio); ?>" required>
+                <input type="date" name="fecha_fin" value="<?php echo htmlspecialchars($fechaFin); ?>" required>
+                <button type="submit" class="btn btn-secondary">Filtrar</button>
+            </form>
+        </div>
+        
         <?php if (!empty($entries)): ?>
             <table>
                 <tr>
@@ -152,8 +188,8 @@ if (isset($_SESSION['documento']) || isset($_GET['documento'])) {
             </table>
             <div class="btn-container">
                 <!-- Enlaces para descargar en PDF y Excel con el documento como parámetro -->
-                <a class="btn btn-success" href="excelentra.php?documento=<?php echo urlencode($documento); ?>">Exportar a Excel</a>
-                <a class="btn btn-danger" href="pdfentra.php?documento=<?php echo urlencode($documento); ?>">Descargar PDF</a>
+                <a class="btn btn-success" href="excelentra.php?documento=<?php echo urlencode($documento); ?>&fecha_inicio=<?php echo urlencode($fechaInicio); ?>&fecha_fin=<?php echo urlencode($fechaFin); ?>">Exportar a Excel</a>
+                <a class="btn btn-danger" href="pdfentra.php?documento=<?php echo urlencode($documento); ?>&fecha_inicio=<?php echo urlencode($fechaInicio); ?>&fecha_fin=<?php echo urlencode($fechaFin); ?>">Descargar PDF</a>
             </div>
         <?php else: ?>
             <p>No se encontraron registros de entrada y salida para el documento proporcionado.</p>
