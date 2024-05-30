@@ -1,5 +1,5 @@
 <?php
-require_once("db/conexion.php");
+require_once ("db/conexion.php");
 $base = new Database();
 $conexion = $base->conectar();
 
@@ -21,6 +21,7 @@ if (isset($_POST["btn-guardar"])) {
     $correo = $_POST['correo'];
     $raw_password = $_POST['contrasena'];
     $nit_empresa = $_POST['nit_empresa'];  // Contraseña sin cifrar
+
 
     $codigo_de_barras = uniqid();
 
@@ -47,14 +48,16 @@ if (isset($_POST["btn-guardar"])) {
         echo '<script>alert("El documento ya está registrado.");</script>';
     } else {
         // Utilizamos consultas preparadas para mejorar la seguridad
-        $consulta3 = $conexion->prepare("INSERT INTO usuario (documento, nombres, correo, contrasena, codigo_barras, id_rol, id_tipo_documento, id_estados ,nit_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $consulta3 = $conexion->prepare("INSERT INTO usuario (documento, nombres, correo, contrasena,codigo_barras, id_rol, id_tipo_documento, id_estados ,nit_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $consulta3->execute([$documento, $nombres, $correo, $hashed_password, $codigo_de_barras, $rol, $id_tipo_documento, $id_estados, $nit_empresa]);
-        echo '<script>alert ("Registro exitoso, gracias");</script>';
+        ;
+        echo '<script>alert ("Registro exitoso,gracias");</script>';
         echo '<script> window.location= "login.php"</script>';
         exit();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,98 +119,88 @@ if (isset($_POST["btn-guardar"])) {
                 input.value = input.value.replace(/[^a-zA-Z\s]/g, '').slice(0, 30);
             }
         }
-
-        function validateDocumentoLength(event) {
-            const input = event.target;
-            if (input.value.length < 8) {
-                alert("El documento debe tener al menos 8 números.");
-            }
-        }
-
-        function validateForm(event) {
-            const documentoInput = document.querySelector('input[name="documento"]');
-            if (documentoInput.value.length < 8) {
-                alert("El documento debe tener al menos 8 números.");
-                event.preventDefault();
-            }
-        }
     </script>
 </head>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="form-container">
-                <form method="POST" action="" onsubmit="validateForm(event)">
-                    <h2 class="mb-4">Registro de Usuario</h2>
-                    <div class="form-group">
-                        <label for="id_tipo_documento">Tipo de Documento:</label>
-                        <select class="form-control" name="id_tipo_documento" required>
-                            <option value="">Seleccionar Tipo de Documento</option>
-                            <option value="1">CC</option>
-                            <option value="2">TI</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="documento">Documento de Identidad:</label>
-                        <input type="text" class="form-control" name="documento" required pattern="\d{8,11}" maxlength="11" oninput="validateInput(event)" onblur="validateDocumentoLength(event)">
-                    </div>
-                    <div class="form-group">
-                        <label for="nombres">Nombre:</label>
-                        <input type="text" class="form-control" name="nombres" required pattern="[a-zA-Z\s]{1,30}" maxlength="30" oninput="validateInput(event)">
-                    </div>
-                    <div class="form-group">
-                        <label for="correo">Correo Electrónico:</label>
-                        <input type="email" class="form-control" name="correo" required>
-                    </div>
-                    <div class="form-group">
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-container">
+                    <form method="POST" action="">
+                        <h2 class="mb-4">Registro de Usuario</h2>
+                        <div class="form-group">
+                            <label for="id_tipo_documento">Tipo de Documento:</label>
+                            <select class="form-control" name="id_tipo_documento" required>
+                                <option value="">Seleccionar Tipo de Documento</option>
+                                <option value="1">CC</option>
+                                <option value="2">TI</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="documento">Documento de Identidad:</label>
+                            <input type="text" class="form-control" name="documento" required pattern="\d{8,11}" maxlength="11" oninput="validateInput(event)">
+                            <small class="text-muted">Debe contener entre 8 y 11 dígitos numéricos.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombres">Nombre:</label>
+                            <input type="text" class="form-control" name="nombres" required pattern="[a-zA-Z\s]{1,30}" maxlength="30" oninput="validateInput(event)">
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo Electrónico:</label>
+                            <input type="email" class="form-control" name="correo" required>
+                        </div>
+                        <div class="form-group">
                         <label for="contrasena">Contraseña:</label>
-                        <input type="password" class="form-control" name="contrasena" required minlength="8">
-                    </div>
-                    <div class="col-sm-15 mb-3 mb-sm-2">
-                        <label>Rol</label>
-                        <select name="rol" class="form-control form-control-user" id="exampleFirstName" required>
-                            <option value="">Elegir</option>
-                            <?php
-                            do {
-                            ?>
-                                <option value="<?php echo ($query2['id_rol']) ?>">
-                                    <?php echo ($query2['nom_rol']) ?>
-                                </option>
-                            <?php
-                            } while ($query2 = $control2->fetch());
-                            ?>
-                        </select>
-                    </div>
-                    <div class="col-sm-15 mb-3 mb-sm-2">
-                        <label>Nit Empresa</label>
-                        <select name="nit_empresa" class="form-control form-control-user" id="exampleFirstName" required style="width: 100%;">
-                            <option value="">Elegir</option>
-                            <?php
-                            if ($query6) { // Verificar si hay resultados en $query6
-                                do {
-                            ?>
-                                    <option value="<?php echo ($query6['nit_empresa']) ?>">
-                                        <?php echo ($query6['nombre']) ?>
-                                    </option>
-                            <?php
-                                } while ($query6 = $control6->fetch());
-                            }
-                            ?>
-                        </select>
+                        <input type="password" class="form-control" name="contrasena" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" oninput="validatePassword(event)">
+                        <small class="text-muted">Debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula y un número.</small>
                     </div>
 
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="terminos_condiciones" required>
-                        <label class="form-check-label" for="terminos_condiciones">Acepto los Términos y Condiciones</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary" name="btn-guardar">Guardar</button>
-                    <p class="mt-3">¿Ya tienes una cuenta? <a class="ingresar" href="login.php">Ingresar</a></p>
-                    <a href="index.html" class="btn btn-dark">Volver</a>
-                </form>
+                        <div class="col-sm-15 mb-3 mb-sm-2">
+                            <label>Rol</label>
+                            <select name="rol" class="form-control form-control-user" id="exampleFirstName" required>
+                                <option value="">Elegir</option>
+                                <?php
+                                do {
+                                ?>
+                                    <option value="<?php echo ($query2['id_rol']) ?>">
+                                        <?php echo ($query2['nom_rol']) ?>
+                                    </option>
+                                <?php
+                                } while ($query2 = $control2->fetch());
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-15 mb-3 mb-sm-2">
+                            <label>Nit Empresa</label>
+                            <select name="nit_empresa" class="form-control form-control-user" id="exampleFirstName" required style="width: 100%;">
+                                <option value="">Elegir</option>
+                                <?php
+                                if ($query6) { // Verificar si hay resultados en $query6
+                                    do {
+                                ?>
+                                        <option value="<?php echo ($query6['nit_empresa']) ?>">
+                                            <?php echo ($query6['nombre']) ?>
+                                        </option>
+                                <?php
+                                    } while ($query6 = $control6->fetch());
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="terminos_condiciones" required>
+                            <label class="form-check-label" for="terminos_condiciones">Acepto los Términos y Condiciones</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="btn-guardar">Guardar</button>
+                        <p class="mt-3">¿Ya tienes una cuenta? <a class="ingresar" href="login.php">Ingresar</a></p>
+                        <a href="index.html" class="btn btn-dark">Volver</a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</body>
 
 </html>
