@@ -131,14 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["validar_V"]) && $_POST
             </div>
         </div>
     </nav>
-     <div class="modal" id="modal">
-        <div class="modal-content">
-            <h2 class="text-center mb-4">Panel Administrador</h2>
-            <div class="form-group">
-                <input type="password" id="passwordInput" class="form-control" placeholder="Digite codigo">
-            </div>
-            <button onclick="validarCodigo()" class="btn btn-success">Aceptar</button>
-        </div>
     </div>
 
 <body>
@@ -153,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["validar_V"]) && $_POST
                         <form method="post" onsubmit="return validateNit()">
                         <div class="form-group">
                                 <label for="nit_empresa">Nit Empresa</label>
-                                <input type="text" class="form-control" id="nit_empresa" name="nit_empresa" title="Debe ser de 10 d„1¤7„1¤7gitos" required minlength="7" maxlength="12" pattern="[0-9\-]*" onkeyup="limpiarNoPermitidos(this)"required >
+                                <input type="text" class="form-control" id="nit_empresa" name="nit_empresa" title="Debe ser de 10 dï¿½1ï¿½7ï¿½1ï¿½7gitos" required minlength="7" maxlength="12" pattern="[0-9\-]*" onkeyup="limpiarNoPermitidos(this)"required >
                             </div>
                             <div class="form-group">
                             <label for="telefono">Telefono</label>
@@ -181,18 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["validar_V"]) && $_POST
             window.location.href = "./../index.php";
         }
 
-        function validarCodigo() {
-            const codigoCorrecto = "yesicagomezrueda";
-            const codigoIngresado = document.getElementById("passwordInput").value;
-
-            if (codigoIngresado === codigoCorrecto) {
-                alert("Bienvenido al panel de administrador.");
-                document.getElementById("modal").style.display = "none";
-            } else {
-                alert("Contrase„1¤70„1¤79a incorrecta.");
-            }
-        }
-
         window.onload = function() {
             document.getElementById("modal").style.display = "block";
         };
@@ -211,8 +191,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["validar_V"]) && $_POST
     const nitPattern = /^[0-9-]+$/;
 
     if (!nitPattern.test(nitValue)) {
-        alert('El NIT solo puede contener n„1¤7„1¤7meros y guiones.');
-        nitInput.setCustomValidity('El NIT solo puede contener n„1¤7„1¤7meros y guiones.');
+        alert('El NIT solo puede contener nï¿½1ï¿½7ï¿½1ï¿½7meros y guiones.');
+        nitInput.setCustomValidity('El NIT solo puede contener nï¿½1ï¿½7ï¿½1ï¿½7meros y guiones.');
         return false;
     } else if (nitValue.length < 10 || nitValue.length > 13) {
         alert('El NIT debe tener entre 10 y 13 caracteres.');
@@ -239,7 +219,7 @@ function espacios(input) {
         var regex = /^[a-zA-Z0-9\- ]*$/;
 
         if (!regex.test(valor)) {
-            alert('El nombre de empresa solo puede contener letras, n„1¤7„1¤7meros y guiones.');
+            alert('El nombre de empresa solo puede contener letras, nï¿½1ï¿½7ï¿½1ï¿½7meros y guiones.');
             input.value = valor.replace(/[^a-zA-Z0-9\- ]/g, ''); // Eliminar caracteres no permitidos
         }
     }
@@ -248,7 +228,7 @@ function espacios(input) {
     <script>
         
 function limpiarNoPermitidos(input) {
-    // Reemplazar todo lo que no sea n„1¤7„1¤7mero o guion con una cadena vac„1¤7„1¤7a
+    // Reemplazar todo lo que no sea nï¿½1ï¿½7ï¿½1ï¿½7mero o guion con una cadena vacï¿½1ï¿½7ï¿½1ï¿½7a
     input.value = input.value.replace(/[^0-9\-]/g, '');
 }
     </script>
@@ -258,9 +238,9 @@ function limpiarNoPermitidos(input) {
         const telefonoValue = input.value.trim();
         const telefonoNumeros = telefonoValue.replace(/\s/g, ''); // Eliminar espacios en blanco
 
-        // Verificar si el valor contiene solo n¨²meros y tiene un m¨¢ximo de 10 d¨ªgitos
+        // Verificar si el valor contiene solo nï¿½ï¿½meros y tiene un mï¿½ï¿½ximo de 10 dï¿½ï¿½gitos
         if (!(/^\d{0,10}$/).test(telefonoNumeros)) {
-            input.setCustomValidity('El tel¨¦fono debe contener solo n¨²meros y tener m¨¢ximo 10 d¨ªgitos.');
+            input.setCustomValidity('El telï¿½ï¿½fono debe contener solo nï¿½ï¿½meros y tener mï¿½ï¿½ximo 10 dï¿½ï¿½gitos.');
         } else {
             input.setCustomValidity(''); // Restablecer mensaje de error
         }
@@ -271,3 +251,4 @@ function limpiarNoPermitidos(input) {
 </body>
 
 </html>
+
