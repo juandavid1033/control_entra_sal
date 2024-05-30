@@ -17,7 +17,7 @@ $control2 = $conexion->prepare("SELECT * FROM rol WHERE id_rol = 1");
 $control2->execute();
 $query2 = $control2->fetchAll(PDO::FETCH_ASSOC);
 
-$control6 = $conexion->prepare("SELECT * FROM licencias");
+$control6 = $conexion->prepare("SELECT * FROM empresas LIMIT 1");
 $control6->execute();
 $query6 = $control6->fetchAll(PDO::FETCH_ASSOC);
 
@@ -47,16 +47,32 @@ if (isset($_POST["btn-guardar"])) {
     $validar->execute([$documento]);
     $fila1 = $validar->fetch(PDO::FETCH_ASSOC);
 
-    if ($fila1) {
+    // Validar si el documento ya está registrado
+    $validarDocumento = $conexion->prepare("SELECT * FROM usuario WHERE documento = ?");
+    $validarDocumento->execute([$documento]);
+    $filaDocumento = $validarDocumento->fetch(PDO::FETCH_ASSOC);
+
+    // Validar si el correo ya está registrado
+    $validarCorreo = $conexion->prepare("SELECT * FROM usuario WHERE correo = ?");
+    $validarCorreo->execute([$correo]);
+    $filaCorreo = $validarCorreo->fetch(PDO::FETCH_ASSOC);
+
+    if ($filaDocumento) {
         echo '<script>alert("El documento ya está registrado.");</script>';
+    } elseif ($filaCorreo) {
+        echo '<script>alert("El correo ya está registrado.");</script>';
     } else {
+
         $consulta3 = $conexion->prepare("INSERT INTO usuario (documento, nombres, correo, contrasena, codigo_barras, id_rol, id_tipo_documento, id_estados, nit_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $consulta3->execute([$documento, $nombres, $correo, $hashed_password, $codigo_de_barras, $rol, $id_tipo_documento, $id_estados, $nit_empresa]);
         echo '<script>alert("Registro exitoso, gracias");</script>';
         echo '<script>window.location= "index.php"</script>';
         exit();
     }
+
+    
 }
+
 ?>
 
 
@@ -158,15 +174,6 @@ if (isset($_POST["btn-guardar"])) {
         <!-- Barra de navegación existente aquí -->
     </nav>
 
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h2 class="text-center mb-4">Panel Administrador - Digite Su Contraseña:</h2>
-            <div class="form-group">
-                <input type="password" id="passwordInput" class="form-control" placeholder="Contraseña">
-            </div>
-            <button onclick="validarCodigo()" class="btn btn-success">Aceptar</button>
-        </div>
-    </div>
     <br><br>
 
     <div class="container">
@@ -182,20 +189,36 @@ if (isset($_POST["btn-guardar"])) {
                                 <option value="1">CC</option>
                                 <option value="2">CE</option>
                             </select>
-                        </div>
-                        <div class="form-group">
+                            <div class="form-group">
                         <label for="documento">Documento de Identidad:</label>
-                        <input type="number" class="form-control" name="documento" required maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            name="documento" 
+                            required 
+                            maxlength="11" 
+                            minlength="8" 
+                            pattern="\d{8,11}" 
+                            title="El documento debe contener entre 8 y 11 números"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
+                        >
                     </div>
+
 
                     <div class="form-group">
                         <label for="nombres">Nombre:</label>
                         <input type="text" class="form-control" name="nombres" required maxlength="20" oninput="javascript: this.value = this.value.replace(/[^A-Za-z]/g, '').slice(0, 20);">
                     </div>
 
-                        <div class="form-group">
+                                <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
-                            <input type="email" class="form-control" name="correo" required>
+                            <input 
+                                type="email" 
+                                class="form-control" 
+                                name="correo" 
+                                id="correo"
+                                required
+                            >
                         </div>
                         <div class="form-group">
                         <label for="contrasena">Contraseña:</label>
@@ -213,14 +236,15 @@ if (isset($_POST["btn-guardar"])) {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="nit_empresa">Nit Empresa:</label>
-                            <select name="nit_empresa" class="form-control" required>
-                                <option value="">Elegir</option>
-                                <?php foreach ($query6 as $licencia) : ?>
-                                    <option value="<?php echo $licencia['nit_empresa']; ?>"><?php echo $licencia['nit_empresa']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                        <label for="nit_empresa">Nombre de la Empresa:</label>
+                        <select name="nit_empresa" class="form-control" required>
+                            <option value="">Elegir</option>
+                            <?php foreach ($query6 as $empresa) : ?>
+                                <option value="<?php echo $empresa['nit_empresa']; ?>"><?php echo $empresa['nombre']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                         <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="terminos_condiciones" required>
                             <label class="form-check-label" for="terminos_condiciones">Acepto los Términos y Condiciones</label>
@@ -234,24 +258,34 @@ if (isset($_POST["btn-guardar"])) {
     <br><br>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0sG1M5b4hcpxyD9F7jL+7HAuoDl5QaVVt72hYx0K5L7B4jBi" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#registroForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var correo = $('#correo').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'validar_correo.php',
+                    data: { correo: correo },
+                    success: function(response) {
+                        if (response == 'exists') {
+                            alert('El correo ya está registrado.');
+                        } else {
+                            $('#registroForm')[0].submit();
+                        }
+                    }
+                });
+            });
+        });
+
         function closeModal() {
             document.getElementById("modal").style.display = "none";
             window.location.href = "./../index.php";
         }
 
-        function validarCodigo() {
-            const codigoCorrecto = "yesicagomezrueda";
-            const codigoIngresado = document.getElementById("passwordInput").value;
-
-            if (codigoIngresado === codigoCorrecto) {
-                alert("Bienvenido al panel de administrador.");
-                document.getElementById("modal").style.display = "none";
-            } else {
-                alert("Contraseña incorrecta.");
-            }
-        }
 
         window.onload = function() {
             document.getElementById("modal").style.display = "block";
@@ -270,24 +304,26 @@ if (isset($_POST["btn-guardar"])) {
 
             return true;
         }
-    </script>
-    <script>
-    function validarContrasena() {
-        const contrasenaInput = document.getElementById('contrasena');
-        const contrasenaValue = contrasenaInput.value;
 
-        const tieneMayuscula = /[A-Z]/.test(contrasenaValue);
-        const tieneLongitudSuficiente = contrasenaValue.length >= 8;
+        function validarContrasena() {
+            const contrasenaInput = document.getElementById('contrasena');
+            const contrasenaValue = contrasenaInput.value;
 
-        if (tieneMayuscula && tieneLongitudSuficiente) {
-            contrasenaInput.setCustomValidity('');
-        } else {
-            contrasenaInput.setCustomValidity('La contraseña debe contener al menos una mayúscula y tener un mínimo de 8 caracteres.');
+            const tieneMayuscula = /[A-Z]/.test(contrasenaValue);
+            const tieneLongitudSuficiente = contrasenaValue.length >= 8;
+
+            if (tieneMayuscula && tieneLongitudSuficiente) {
+                contrasenaInput.setCustomValidity('');
+            } else {
+                contrasenaInput.setCustomValidity('La contraseña debe contener al menos una mayúscula y tener un mínimo de 8 caracteres.');
+            }
         }
-    }
-</script>
+    </script>
+</body>
+</html>
 
 
 </body>
 
 </html>
+
