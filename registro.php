@@ -1,5 +1,5 @@
 <?php
-require_once ("db/conexion.php");
+require_once("db/conexion.php");
 $base = new Database();
 $conexion = $base->conectar();
 
@@ -42,21 +42,28 @@ if (isset($_POST["btn-guardar"])) {
     // Utilizamos consultas preparadas para mejorar la seguridad
     $validar = $conexion->prepare("SELECT * FROM usuario WHERE documento = ?");
     $validar->execute([$documento]);
-    $fila1 = $validar->fetchAll(PDO::FETCH_ASSOC);
+    $filaDocumento = $validar->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($fila1) {
+    // Validar si el correo ya está registrado
+    $validarCorreo = $conexion->prepare("SELECT * FROM usuario WHERE correo = ?");
+    $validarCorreo->execute([$correo]);
+    $filaCorreo = $validarCorreo->fetch(PDO::FETCH_ASSOC);
+
+    if ($filaDocumento) {
         echo '<script>alert("El documento ya está registrado.");</script>';
+    } elseif ($filaCorreo) {
+        echo '<script>alert("El correo ya está registrado.");</script>';
     } else {
         // Utilizamos consultas preparadas para mejorar la seguridad
         $consulta3 = $conexion->prepare("INSERT INTO usuario (documento, nombres, correo, contrasena,codigo_barras, id_rol, id_tipo_documento, id_estados ,nit_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $consulta3->execute([$documento, $nombres, $correo, $hashed_password, $codigo_de_barras, $rol, $id_tipo_documento, $id_estados, $nit_empresa]);
-        ;
-        echo '<script>alert ("Registro exitoso,gracias");</script>';
-        echo '<script> window.location= "login.php"</script>';
+        echo '<script>alert("Registro exitoso, gracias");</script>';
+        echo '<script>window.location= "login.php"</script>';
         exit();
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
