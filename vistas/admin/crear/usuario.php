@@ -51,7 +51,6 @@ if (isset($_POST["validar_V"])) {
 
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,14 +81,14 @@ if (isset($_POST["validar_V"])) {
                     <!-- Nested Row within Card Body -->
                     <div class="row">
                         <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                        <div class="col-lg-10">
+                        <div class="col-lg-7">
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 mb-4">Crear Usuario</h1>
                                 </div>
                                 <form class="user">
                                     <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Tipo de Documento</label>
                                             <select name="tipo" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
@@ -104,20 +103,20 @@ if (isset($_POST["validar_V"])) {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-6 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Documento</label>
                                             <input type="text" style="margin-bottom:5px;" class="form-control form-control-user" id="documento" name="documento" placeholder="Documento" required minlength="8" maxlength="11" pattern="\d{8,11}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                                             <small class="form-text text-muted">El documento debe contener entre 8 y 11 números.</small>
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Nombres</label>
                                             <input type="text" class="form-control form-control-user" id="nombres" name="nombres" placeholder="Nombres" required maxlength="30" oninput="validarNombre(event)">
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Correo</label>
                                             <input type="email" class="form-control form-control-user" id="correo" name="correo" placeholder="Correo electrónico" required>
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Rol</label>
                                             <select name="rol" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
@@ -132,7 +131,7 @@ if (isset($_POST["validar_V"])) {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-15 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Nit Empresa</label>
                                             <select name="nit_empresa" class="form-control form-control-user" id="exampleFirstName" required style="width: 100%;">
                                                 <option value="">Elegir</option>
@@ -149,7 +148,7 @@ if (isset($_POST["validar_V"])) {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-6">
                                             <label>Contraseña</label>
                                             <input type="password" class="form-control form-control-user" id="contrasena" name="contrasena" placeholder="Contraseña" required>
                                         </div>
@@ -193,5 +192,6 @@ if (isset($_POST["validar_V"])) {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 </body>
 </html>
+
 
 
