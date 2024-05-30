@@ -1,25 +1,19 @@
 <?php
-require_once ("../../../db/conexion.php");
+require_once("../../../db/conexion.php");
 $daba = new Database();
 $conex = $daba->conectar();
-
-
-
 
 $control2 = $conex->prepare("SELECT * From rol LIMIT 1, 7");
 $control2->execute();
 $query2 = $control2->fetch();
 
-
 $control3 = $conex->prepare("SELECT * From tipo_documento");
 $control3->execute();
 $query3 = $control3->fetch();
 
-
-$control6 = $conex->prepare("SELECT * From licencias LIMIT 1");
+$control6 = $conex->prepare("SELECT * From empresas LIMIT 1");
 $control6->execute();
 $query6 = $control6->fetch();
-
 
 if (isset($_POST["validar_V"])) {
     $cedula = $_POST['documento'];
@@ -30,34 +24,31 @@ if (isset($_POST["validar_V"])) {
     $tipo = $_POST['tipo'];
     $nit_empresa = $_POST['nit_empresa'];
 
+    // Validar que no haya campos vacíos
+    if ($cedula == "" || $nombres == "" || $correo == "" || $contra == "" || $rol == "" || $tipo == "") {
+        echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
+        echo '<script>window.location="./usuario.php"</script>';
+    } else {
+        // Verificar si el correo ya existe en la base de datos
+        $validarCorreo = $conex->prepare("SELECT * FROM usuario WHERE correo = ?");
+        $validarCorreo->execute([$correo]);
+        $queryCorreo = $validarCorreo->fetch();
 
-        $validar = $conex->prepare("SELECT * FROM usuario where documento='$cedula'");
-        $validar->execute();
-        $queryi = $validar->fetch();
-        $incri = password_hash($contra, PASSWORD_BCRYPT, ['cost' => 14,]);
-
-
-
-
-        if ($cedula == "" || $nombres == "" || $correo == "" || $contra == "" || $rol == "" || $tipo == "") {
-
-
-            echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
+        if ($queryCorreo) {
+            echo '<script>alert ("El correo electrónico ya está registrado. Por favor, elija otro.");</script>';
             echo '<script>window.location="./usuario.php"</script>';
-        } else if ($queryi) {
-            echo '<script>alert ("DOCUMENTO YA EXISTEN // CAMBIELO//");</script>';
-            echo 'script>windows.location="./usuario.php"</script>';
         } else {
-            $insertsql = $conex->prepare("INSERT INTO usuario(documento,codigo_barras,nombres,contrasena,id_rol,id_estados,correo,id_tipo_documento,nit_empresa) VALUES (?,?,?,?,?,?,?,?,?)");
-            $insertsql->execute([$cedula, $cedula, $nombres, $incri, $rol, 1, $correo, $tipo, $nit_empresa]);
-            echo '<script>alert ("Usuario Creado exitosamente, Gracias");</script>';
+            // Si el correo no está registrado, procedemos con la inserción del nuevo usuario
+            $hashed_password = password_hash($contra, PASSWORD_BCRYPT, ['cost' => 14]);
+            $insertsql = $conex->prepare("INSERT INTO usuario (documento, codigo_barras, nombres, contrasena, id_rol, id_estados, correo, id_tipo_documento, nit_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertsql->execute([$cedula, $cedula, $nombres, $hashed_password, $rol, 1, $correo, $tipo, $nit_empresa]);
+            echo '<script>alert ("Usuario creado exitosamente. Gracias.");</script>';
             echo '<script>window.location="../index.php"</script>';
         }
- 
-
-
+    }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -140,17 +131,17 @@ if (isset($_POST["validar_V"])) {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                        <div class="col-sm-15 mb-3 mb-sm-2">
                                             <label>Nit Empresa</label>
-                                            <select name="nit_empresa" class="form-control form-control-user" id="exampleFirstName" required>
+                                            <select name="nit_empresa" class="form-control form-control-user" id="exampleFirstName" required style="width: 100%;">
                                                 <option value="">Elegir</option>
                                                 <?php
                                                 if ($query6) { // Verificar si hay resultados en $query6
                                                     do {
                                                 ?>
-                                                <option value="<?php echo ($query6['nit_empresa']) ?>">
-                                                    <?php echo ($query6['nit_empresa']) ?>
-                                                </option>
+                                                        <option value="<?php echo ($query6['nit_empresa']) ?>">
+                                                            <?php echo ($query6['nombre']) ?>
+                                                        </option>
                                                 <?php
                                                     } while ($query6 = $control6->fetch());
                                                 }
@@ -201,4 +192,5 @@ if (isset($_POST["validar_V"])) {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 </body>
 </html>
+
 
