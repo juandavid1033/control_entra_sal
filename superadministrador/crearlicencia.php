@@ -139,15 +139,6 @@ if ((isset($_POST["valida_v"])) && ($_POST["valida_v"] == "cli")) {
             </div>
         </div>
     </nav>
-     <div class="modal" id="modal">
-        <div class="modal-content">
-            <h2 class="text-center mb-4">Panel Administrador - Digite Su Contraseña:</h2>
-            <div class="form-group">
-                <input type="password" id="passwordInput" class="form-control" placeholder="Contraseña">
-            </div>
-            <button onclick="validarCodigo()" class="btn btn-success">Aceptar</button>
-        </div>
-    </div>
 
 
 <body>
@@ -187,17 +178,6 @@ if ((isset($_POST["valida_v"])) && ($_POST["valida_v"] == "cli")) {
             window.location.href = "./../index.php";
         }
 
-        function validarCodigo() {
-            const codigoCorrecto = "yesicagomezrueda";
-            const codigoIngresado = document.getElementById("passwordInput").value;
-
-            if (codigoIngresado === codigoCorrecto) {
-                alert("Bienvenido al panel de administrador.");
-                document.getElementById("modal").style.display = "none";
-            } else {
-                alert("Contraseña incorrecta.");
-            }
-        }
 
         window.onload = function() {
             document.getElementById("modal").style.display = "block";
