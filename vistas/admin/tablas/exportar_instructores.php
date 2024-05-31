@@ -23,7 +23,7 @@ $options->set('isPhpEnabled', true);
 $dompdf = new Dompdf($options);
 
 // Obtener los datos de la primera tabla
-$sql1 = $conex->prepare("SELECT * FROM usuario LEFT JOIN estados ON usuario.id_estados = estados.id_estados WHERE id_rol = 5 ORDER BY documento");
+$sql1 = $conex->prepare("SELECT * FROM usuario  WHERE id_rol = 5 ORDER BY documento");
 $sql1->execute();
 $resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
 
@@ -44,8 +44,8 @@ $html = "<html>
         th {
             background-color: #f2f2f2;
         }
-        img {
-            max-width: 100px;
+        .barcode-img {
+            max-width: 200px; /* Ajusta el ancho máximo de la imagen del código de barras */
             height: auto;
         }
     </style>
@@ -58,8 +58,6 @@ $html = "<html>
                 <th>Documento</th>
                 <th>Código de Barras</th>
                 <th>Nombre</th>
-                <th>Correo</th>
-                <th>Estado</th>
             </tr>
         </thead>
         <tbody>";
@@ -71,7 +69,7 @@ foreach ($resultado1 as $row) {
     if (isset($row['codigo_barras']) && !empty($row['codigo_barras'])) {
         $codigoBarras = $row['codigo_barras'];
         $barcode = base64_encode($generator->getBarcode($codigoBarras, $generator::TYPE_CODE_128));
-        $barcodeImg = "<img src='data:image/png;base64,{$barcode}' alt='Código de Barras'>";
+        $barcodeImg = "<img class='barcode-img' src='data:image/png;base64,{$barcode}' alt='Código de Barras'>";
     } else {
         $barcodeImg = "No disponible";
     }
@@ -80,8 +78,6 @@ foreach ($resultado1 as $row) {
     $html .= "<td>{$row['documento']}</td>";
     $html .= "<td>{$barcodeImg}</td>";
     $html .= "<td>{$row['nombres']}</td>";
-    $html .= "<td>{$row['correo']}</td>";
-    $html .= "<td>{$row['nom_estado']}</td>";
     $html .= "</tr>";
 }
 
