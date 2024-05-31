@@ -1,11 +1,13 @@
 <?php
 require_once("../../../db/conexion.php");
-$daba = new Database();
-$conex = $daba->conectar();
 require_once("../../../vendor/autoload.php");
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+
+$daba = new Database();
+$conex = $daba->conectar();
 
 // Función para generar el archivo PDF
 function generarPDF($resultado)
@@ -35,6 +37,15 @@ function generarPDF($resultado)
             th {
                 background-color: #f2f2f2;
             }
+            img {
+                width: 100%;
+                height: 50px; /* Ajustar la altura de la imagen */
+            }
+            .barcode-container {
+                width: 200px; /* Aumentar el tamaño del contenedor del código de barras */
+                height: auto;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -43,18 +54,28 @@ function generarPDF($resultado)
             <thead>
                 <tr>
                     <th>Documento</th>
+                    <th>Codigo de barras</th>
                     <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Estado</th>
                 </tr>
             </thead>
             <tbody>";
+
+    $generator = new BarcodeGeneratorPNG();
+
     foreach ($resultado as $row) {
+        // Verificar que 'codigo_barras' esté definido y no esté vacío
+        if (isset($row['codigo_barras']) && !empty($row['codigo_barras'])) {
+            $codigoBarras = $row['codigo_barras'];
+            $barcode = base64_encode($generator->getBarcode($codigoBarras, $generator::TYPE_CODE_128));
+            $barcodeImg = "<div class='barcode-container'><img src='data:image/png;base64,{$barcode}' alt='Código de Barras'></div>";
+        } else {
+            $barcodeImg = "No disponible";
+        }
+
         $html .= "<tr>";
         $html .= "<td>{$row['documento']}</td>";
+        $html .= "<td>{$barcodeImg}</td>";
         $html .= "<td>{$row['nombres']}</td>";
-        $html .= "<td>{$row['correo']}</td>";
-        $html .= "<td>{$row['nom_estado']}</td>";
         $html .= "</tr>";
     }
     $html .= "</tbody></table></body></html>";
@@ -77,10 +98,11 @@ if (isset($_GET['pagina'])) {
     $pagina = 1;
 }
 $empieza = ($pagina - 1) * $por_pagina;
-$sql = $conex->prepare("SELECT * FROM usuario LEFT JOIN estados ON usuario.id_estados = estados.id_estados WHERE id_rol = 3 ORDER BY documento LIMIT $empieza, $por_pagina");
+$sql = $conex->prepare("SELECT * FROM usuario  WHERE id_rol = 3 ORDER BY documento LIMIT $empieza, $por_pagina");
 $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 // Llamar a la función para generar el archivo PDF
 generarPDF($resultado);
 ?>
+
