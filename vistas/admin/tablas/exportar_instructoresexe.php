@@ -19,9 +19,7 @@ function generarExcel($resultado)
     $sheet->setCellValue('A1', 'Documento');
     $sheet->setCellValue('B1', 'Código de Barras');
     $sheet->setCellValue('C1', 'Nombre');
-    $sheet->setCellValue('D1', 'Correo');
-    $sheet->setCellValue('E1', 'Estado');
-
+   
     $generator = new BarcodeGeneratorPNG();
 
     // Llenar datos en la hoja
@@ -29,9 +27,7 @@ function generarExcel($resultado)
     foreach ($resultado as $row_data) {
         $sheet->setCellValue('A' . $row, $row_data['documento']);
         $sheet->setCellValue('C' . $row, $row_data['nombres']);
-        $sheet->setCellValue('D' . $row, $row_data['correo']);
-        $sheet->setCellValue('E' . $row, $row_data['nom_estado']);
-
+       
         // Generar código de barras
         if (isset($row_data['codigo_barras']) && !empty($row_data['codigo_barras'])) {
             $codigoBarras = $row_data['codigo_barras'];
@@ -45,6 +41,12 @@ function generarExcel($resultado)
             $drawing->setCoordinates('B' . $row);
             $drawing->setHeight(50);
             $drawing->setWorksheet($sheet);
+
+            // Obtener el ancho de la imagen del código de barras
+            $barcodeImageWidth = $drawing->getWidth();
+
+            // Ajustar el ancho de la columna B basado en el ancho de la imagen del código de barras
+            $sheet->getColumnDimension('B')->setWidth($barcodeImageWidth / 7); // Dividir por 7 para ajustar el ancho
         }
 
         $row++;
@@ -75,7 +77,7 @@ if (isset($_GET['pagina'])) {
     $pagina = 1;
 }
 $empieza = ($pagina - 1) * $por_pagina;
-$sql1 = $conex->prepare("SELECT * FROM usuario LEFT JOIN estados ON usuario.id_estados = estados.id_estados WHERE id_rol = 5 ORDER BY documento LIMIT $empieza, $por_pagina");
+$sql1 = $conex->prepare("SELECT * FROM usuario WHERE id_rol = 5 ORDER BY documento LIMIT $empieza, $por_pagina");
 $sql1->execute();
 $resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
 
