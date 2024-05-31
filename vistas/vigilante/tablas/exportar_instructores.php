@@ -1,11 +1,18 @@
 <?php
-require_once ("../../../db/conexion.php");
-$daba = new Database();
-$conex = $daba->conectar();
-require_once ("../../../vendor/autoload.php");
+require_once("../../../db/conexion.php");
+require_once("../../../vendor/autoload.php");
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+
+$daba = new Database();
+$conex = $daba->conectar();
+
+// Verifica que la conexión se haya establecido correctamente
+if ($conex === false) {
+    die("ERROR: No se pudo conectar a la base de datos.");
+}
 
 // Configuración de DomPdf
 $options = new Options();
@@ -16,7 +23,7 @@ $options->set('isPhpEnabled', true);
 $dompdf = new Dompdf($options);
 
 // Obtener los datos de la primera tabla
-$sql1 = $conex->prepare("SELECT usuario.*, estados.id_estados, estados.nom_estado FROM usuario LEFT JOIN estados ON usuario.id_estados = estados.id_estados WHERE id_rol = 5 ORDER BY documento");
+$sql1 = $conex->prepare("SELECT * FROM usuario  WHERE id_rol = 5 ORDER BY documento");
 $sql1->execute();
 $resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
 
@@ -24,29 +31,57 @@ $resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
 $html = "<html>
 <head>
     <title>Reporte PDF</title>
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css'>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .barcode-img {
+            max-width: 200px; /* Ajusta el ancho máximo de la imagen del código de barras */
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <h1>Instructores</h1>
-    <table class='table'>
+    <table>
         <thead>
             <tr>
                 <th>Documento</th>
+                <th>Código de Barras</th>
                 <th>Nombre</th>
-                <th>Correo</th>
-                <th>Estado</th>
             </tr>
         </thead>
         <tbody>";
+
+$generator = new BarcodeGeneratorPNG();
+
 foreach ($resultado1 as $row) {
+    // Verificar que 'codigo_barras' esté definido y no esté vacío
+    if (isset($row['codigo_barras']) && !empty($row['codigo_barras'])) {
+        $codigoBarras = $row['codigo_barras'];
+        $barcode = base64_encode($generator->getBarcode($codigoBarras, $generator::TYPE_CODE_128));
+        $barcodeImg = "<img class='barcode-img' src='data:image/png;base64,{$barcode}' alt='Código de Barras'>";
+    } else {
+        $barcodeImg = "No disponible";
+    }
+
     $html .= "<tr>";
     $html .= "<td>{$row['documento']}</td>";
+    $html .= "<td>{$barcodeImg}</td>";
     $html .= "<td>{$row['nombres']}</td>";
-    $html .= "<td>{$row['correo']}</td>";
-    $html .= "<td>{$row['nom_estado']}</td>";
     $html .= "</tr>";
 }
-$html .= "</tbody></table>";
+
+$html .= "</tbody></table></body></html>";
 
 // Cargar el contenido HTML en DomPdf
 $dompdf->loadHtml($html);
@@ -56,3 +91,4 @@ $dompdf->render();
 
 // Salida del PDF (descargar o mostrar)
 $dompdf->stream('reporte.pdf', ['Attachment' => true]);
+?>
