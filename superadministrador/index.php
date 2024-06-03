@@ -105,7 +105,11 @@ if (isset($_POST['btncerrar'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="registro_adm.php">Registro Administrador</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tabla_administrador.php">Reporte</a>
+                    </li>
                 </ul>
+
                 <form method="POST" action="">
                     <span class="ms-2">
                         <input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Cerrar sesión" id="btn_quote" name="btncerrar" />
@@ -228,6 +232,8 @@ if (isset($_POST['btncerrar'])) {
                                         <button class="btn btn-success" type="submit" name="acti" <?= $activo ?>>Renovar</button>
                                     </form>
                                 </td>
+                                <div class="container mt-4">
+                               
                                 <!--<td>-->
                                 <!--    <a href="activar_licencia.php?id=<?= $lista["licencia"] ?>" class="btn btn-success">Activar</a>-->
                                 <!--    <a href="desactivar_licencia.php?id=<?= $lista["licencia"] ?>" class="btn btn-danger">Desactivar</a>-->
@@ -256,7 +262,7 @@ if (isset($_POST['btncerrar'])) {
         }
 
         function validarCodigo() {
-            const codigoCorrecto = "yesicagomezrueda";
+            const codigoCorrecto = "1234510";
             const codigoIngresado = document.getElementById("passwordInput").value;
 
             if (codigoIngresado === codigoCorrecto) {
