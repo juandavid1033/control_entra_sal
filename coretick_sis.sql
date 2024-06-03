@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-05-2024 a las 05:14:13
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 03-06-2024 a las 23:17:33
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -74,7 +74,7 @@ CREATE TABLE `dispositivos` (
 
 CREATE TABLE `empresas` (
   `nit_empresa` varchar(12) NOT NULL,
-  `telefono` int(10) NOT NULL,
+  `telefono` varchar(11) NOT NULL,
   `nombre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -83,7 +83,7 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`nit_empresa`, `telefono`, `nombre`) VALUES
-('1234567891', 2147483647, 'sena');
+('1234567891', '2147483647', 'sena');
 
 -- --------------------------------------------------------
 
