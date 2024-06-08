@@ -1,24 +1,40 @@
+
 <?php
 require_once("../../../db/conexion.php");
 $daba = new Database();
 $conex = $daba->conectar();
 
-$control_documentos = $conex->prepare("SELECT documento FROM usuario WHERE id_rol IN (3, 4, 5)");
-$control_documentos->execute();
-$que = $control_documentos->fetch(PDO::FETCH_ASSOC);
+$control_documentos = $conex->prepare("
+    SELECT usuario.documento, usuario.nombres, rol.nom_rol 
+    FROM usuario 
+    JOIN rol ON usuario.id_rol = rol.id_rol 
+    WHERE usuario.id_rol IN (3, 4, 5)
+");
 
-$control = $conex->prepare("SELECT * From tipo_vehiculo ");
+$control_documentos->execute(); // Ejecutar la consulta
+
+// Verificar si hay resultados
+if ($control_documentos->rowCount() > 0) {
+    // Recorrer los resultados y mostrarlos en el select
+    do {
+        $usuarios[] = $control_documentos->fetch(); // Agregar cada resultado al arreglo $usuarios
+    } while ($control_documentos->fetch());
+} else {
+    // Manejar el caso donde no hay resultados
+    $usuarios = []; // Inicializar $usuarios como un arreglo vacío
+}
+
+$control = $conex->prepare("SELECT * FROM tipo_vehiculo ");
 $control->execute();
 $query = $control->fetch();
 
-$control1 = $conex->prepare("SELECT * FROM marcas LIMIT 1, 9"); 
+$control1 = $conex->prepare("SELECT * FROM marca_vehi"); 
 $control1->execute();
 $query1 = $control1->fetch();
 
-$control2 = $conex->prepare("SELECT * From color LIMIT 0, 7");
+$control2 = $conex->prepare("SELECT * FROM color LIMIT 0, 7");
 $control2->execute();
 $query2 = $control2->fetch();
-
 
 ?>
 
@@ -50,7 +66,7 @@ if (isset($_POST["validar_V"]) == "cli") {
         $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo]);
         echo '<script>alert ("Vehiculo Creado exitosamente, Gracias");</script>';
         echo '<script>window.location="./vehiculo.php"</script>';
-    }else{
+    } else {
         echo '<script>alert ("El usuario no esta registrado // asi que no puede asignar este vehiculo ");</script>';
         echo '<script>window.location="./vehiculo.php"</script>';
 
@@ -78,8 +94,7 @@ if (isset($_POST["validar_V"]) == "cli") {
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
@@ -87,6 +102,12 @@ if (isset($_POST["validar_V"]) == "cli") {
 
     <!-- direccion para que funcione solo numero -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+        .link-yellow {
+            color: yellow;
+        }
+    </style>
 
 </head>
 
@@ -96,7 +117,7 @@ if (isset($_POST["validar_V"]) == "cli") {
             style="padding:10px 14px 10px 10px; color:#fff; font-size:15px; background-color:#29CA8E; border-radius:10px;">
             REGRESAR</i>
     </a><br><br><br>
-    <form method="post" autocomplete="off" name="cli"  id="formVehiculo">
+    <form method="post" autocomplete="off" name="cli" id="formVehiculo">
         <div class="container">
             <div class="card o-hidden border-0 shadow-lg my-6">
                 <div class="card-body p-0">
@@ -106,25 +127,21 @@ if (isset($_POST["validar_V"]) == "cli") {
                         <div class="col-lg-10">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 mb-4" >Crear Vehiculo</h1>
+                                    <h1 class="h4 mb-4">Asignar Vehiculo</h1>
                                 </div>
                                 <form class="user">
-                                    <div class="form-group row" >
-                                        <div class="col-sm-6 mb-6 mb-sm-2">
-                                            <label>Documento</label>
-                                                <select name="documento" class="form-control form-control-user"
-                                                id="exampleFirstName" required>
-                                                <option value="">Elegir</option>
-                                                <?php
-                
-                                                do {
-                
-                                                ?>
-                                                    <option value=<?php echo ($que['documento']) ?>><?php echo ($que['documento']) ?>  </option>
-                                                <?php
-                                                } while ($que = $control_documentos->fetch());
-                
-                                                ?>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-2">
+                                            <label>Persona</label>
+                                            <select name="documento" class="form-control" id="tipoEntrada" required>
+                                                <option>Elegir</option>
+                                                <?php foreach ($usuarios as $usuario): ?>
+                                                    <option value="<?php echo $usuario['documento']; ?>">
+                                                        <?php echo $usuario['documento']; ?> - 
+                                                        <?php echo $usuario['nombres']; ?> - 
+                                                        <?php echo $usuario['nom_rol']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                         <div class="col-sm-6 mb-3 mb-sm-2">
@@ -134,22 +151,26 @@ if (isset($_POST["validar_V"]) == "cli") {
                                         </div>
 
                                         <div class="col-sm-6  mb-3 mb-sm-2">
-                                            <label>Marca</label>
-                                            <select name="marca" class="form-control form-control-user"
+                                            <label>Marca
+                                                <a href="./marca_vehi.php" class="link-yellow">Crear</a>
+                                            </label>
+                                            <select name="marca_vehi" class="form-control form-control-user"
                                                 id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
                                                 <?php
                                                 do {
                                                     ?>
-                                                    <option value="<?php echo ($query1['id_marca']) ?>"> <?php echo ($query1['nom_marca']) ?> </option>
+                                                    <option value="<?php echo ($query1['id_marca']) ?>"> <?php echo ($query1['nom_mar']) ?> </option>
                                                     <?php
                                                 } while ($query1 = $control1->fetch());
                                                 ?>
                                             </select>
                                         </div>
                                         <div class="col-sm-6  mb-3 mb-sm-2">
-                                            <label>Color del Vehiculo</label>
-                                            <select name="color" class="form-control form-control-user"
+                                            <label>Color del Vehiculo
+                                                <a href="./cor_veh.php" class="link-yellow">Crear</a>
+                                            </label>
+                                            <select name="cor_veh" class="form-control form-control-user"
                                                 id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
                                                 <?php
@@ -162,7 +183,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </select>
                                         </div>
                                         <div class="col-sm-6  mb-3 mb-sm-2">
-                                            <label>Tipo del Vehiculo</label>
+                                            <label>Tipo del Vehiculo
+                                                <a href="./tipo_vehic.php" class="link-yellow">Crear</a>
+                                            </label>
                                             <select name="tipovehiculo" class="form-control form-control-user"
                                                 id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
