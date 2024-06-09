@@ -1,5 +1,5 @@
 <?php
-require_once ("../../../db/conexion.php");
+require_once("../../../db/conexion.php");
 $daba = new Database();
 $conex = $daba->conectar();
 session_start();
@@ -85,16 +85,16 @@ if (isset($_POST["recucon"])) {
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-2">Olvidaste tu contraseña?</h1>
+                                            <h1 class="h4 text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
                                         </div>
                                         <form class="user" method="post">
                                             <div class="form-group">
-                                                <input type="password" class="form-control form-control-user" id="documento"
-                                                    name="contra" placeholder="Ingrese Nueva Contrasña">
+                                                <input type="password" class="form-control form-control-user" id="contra"
+                                                    name="contra" placeholder="Ingrese Nueva Contraseña" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula y un número" required>
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" class="form-control form-control-user" id="documento"
-                                                    name="confirmar_contra" placeholder="Confirma Contraseña">
+                                                <input type="password" class="form-control form-control-user" id="confirmar_contra"
+                                                    name="confirmar_contra" placeholder="Confirma Contraseña" required>
                                             </div>
                                             <button type="submit" name="recucon"
                                                 class="btn btn-primary btn-user btn-block">INGRESAR</button>
