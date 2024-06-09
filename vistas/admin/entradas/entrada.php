@@ -3,7 +3,7 @@ require_once ("../../../db/conexion.php");
 $daba = new Database();
 $conex = $daba->conectar();
 
-$control2 = $conex->prepare("SELECT * FROM usuario WHERE id_rol >=3");
+$control2 = $conex->prepare("SELECT u.documento, u.nombres, r.nom_rol FROM usuario u INNER JOIN rol r ON u.id_rol = r.id_rol WHERE u.id_rol >=3");
 $control2->execute();
 ?>
 
@@ -62,7 +62,7 @@ $control2->execute();
                                             <?php while ($query2 = $control2->fetch()): ?>
                                                 <option value="<?php echo $query2['documento']; ?>">
                                                     <?php echo $query2['documento']; ?> -
-                                                    <?php echo $query2['nombres']; ?>
+                                                    <?php echo $query2['nombres']; ?> (<?php echo $query2['nom_rol']; ?>)
                                                 </option>
                                             <?php endwhile; ?>
                                         </select>
@@ -101,3 +101,4 @@ $control2->execute();
 </body>
 
 </html>
+
