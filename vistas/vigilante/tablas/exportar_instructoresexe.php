@@ -17,8 +17,8 @@ function generarExcel($resultado)
 
     // Encabezados de columna
     $sheet->setCellValue('A1', 'Documento');
-    $sheet->setCellValue('B1', 'Código de Barras');
-    $sheet->setCellValue('C1', 'Nombre');
+    $sheet->setCellValue('B1', 'Nombre');
+    $sheet->setCellValue('C1', 'Código de Barras');
    
     $generator = new BarcodeGeneratorPNG();
 
@@ -26,7 +26,7 @@ function generarExcel($resultado)
     $row = 2;
     foreach ($resultado as $row_data) {
         $sheet->setCellValue('A' . $row, $row_data['documento']);
-        $sheet->setCellValue('C' . $row, $row_data['nombres']);
+        $sheet->setCellValue('B' . $row, $row_data['nombres']);
        
         // Generar código de barras
         if (isset($row_data['codigo_barras']) && !empty($row_data['codigo_barras'])) {
@@ -38,15 +38,15 @@ function generarExcel($resultado)
             // Insertar imagen en la celda
             $drawing = new Drawing();
             $drawing->setPath($barcodeFile);
-            $drawing->setCoordinates('B' . $row);
+            $drawing->setCoordinates('C' . $row);
             $drawing->setHeight(50);
             $drawing->setWorksheet($sheet);
 
             // Obtener el ancho de la imagen del código de barras
             $barcodeImageWidth = $drawing->getWidth();
 
-            // Ajustar el ancho de la columna B basado en el ancho de la imagen del código de barras
-            $sheet->getColumnDimension('B')->setWidth($barcodeImageWidth / 7); // Dividir por 7 para ajustar el ancho
+            // Ajustar el ancho de la columna C basado en el ancho de la imagen del código de barras
+            $sheet->getColumnDimension('C')->setWidth($barcodeImageWidth / 7); // Dividir por 7 para ajustar el ancho
         }
 
         $row++;
