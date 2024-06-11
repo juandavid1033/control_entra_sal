@@ -49,8 +49,8 @@ function generarPDF($resultado)
             <thead>
                 <tr>
                     <th>Documento</th>
-                    <th>Código de Barras</th>
                     <th>Nombre</th>
+                    <th>Código de Barras</th>
                 </tr>
             </thead>
             <tbody>";
@@ -69,8 +69,8 @@ function generarPDF($resultado)
 
         $html .= "<tr>";
         $html .= "<td>{$row['documento']}</td>";
-        $html .= "<td>{$barcodeImg}</td>";
         $html .= "<td>{$row['nombres']}</td>";
+        $html .= "<td>{$barcodeImg}</td>";
         $html .= "</tr>";
     }
     $html .= "</tbody></table></body></html>";
