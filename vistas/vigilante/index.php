@@ -24,7 +24,7 @@ $fila = $info->fetch();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Vigilante</title>
+    <title>Administrador</title>
 
     <link href="../../img/logo_gym.png" rel="icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -80,9 +80,8 @@ $fila = $info->fetch();
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Entrada / Salida</span>
-
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Usuario</h6>
                         <a class="collapse-item" href="./crear/usuario.php">Crear Usuario</a>
@@ -101,27 +100,28 @@ $fila = $info->fetch();
                         <a class="collapse-item" href="./tablas/dispositivos.php">Informes de Dispositivos</a>
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Vehiculos</h6>
-                        <a class="collapse-item" href="./crear/vehiculo.php">Crear Vehiculos</a>
-                        <a class="collapse-item" href="./tablas/vehiculos.php">Informes de Vehiculos</a>
+                        <h6 class="collapse-header">Vehículos</h6>
+                        <a class="collapse-item" href="./crear/vehiculo.php">Crear Vehículos</a>
+                        <a class="collapse-item" href="./tablas/vehiculos.php">Informes de Vehículos</a>
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Instructores</h6>
-                        <a class="collapse-item" href="tablas/instructores.php">Informes de Instructores</a>
+                        <a class="collapse-item" href="./tablas/instructores.php">Informes de Instructores</a>
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Aprendiz</h6>
-                        <a class="collapse-item" href="tablas/aprendiz.php">Informes de Aprendiz</a>
+                        <a class="collapse-item" href="./tablas/aprendiz.php">Informes de Aprendiz</a>
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Visitante</h6>
-                        <a class="collapse-item" href="tablas/visitante.php">Informes de Visitantes</a>
+                        <a class="collapse-item" href="./tablas/visitante.php">Informes de Visitantes</a>
+                    </div>
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Vigilante</h6>
+                        <a class="collapse-item" href="./tablas/vigilante.php">Informes de Vigilante</a>
                     </div>
                 </div>
-
-
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -204,100 +204,25 @@ $fila = $info->fetch();
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">BIENVENIDO</h1>
-                    </div>
-
+                  
                     <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- PRIMERA CARTA DE LOS PRECIOS -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Visitantes(Por Dia)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">400</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                   
 
                         <!-- SEGUNDA -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Registrados en el sistema</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- TERCERA -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Asitencia(Por Dia)
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">90%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 90%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                      
                         </div>
 
                         <!-- CUARTA -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Vehículos Registrados</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">180</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                       
+
+                    <!-- Content Row -->
 
 
-
+                    <!-- Content Row -->
+                    
                 </div>
                 <!-- /.container-fluid -->
 
@@ -305,13 +230,7 @@ $fila = $info->fetch();
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; 2024</span>
-                    </div>
-                </div>
-            </footer>
+           
             <!-- End of Footer -->
 
         </div>
