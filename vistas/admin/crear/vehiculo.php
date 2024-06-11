@@ -32,7 +32,7 @@ $control1 = $conex->prepare("SELECT * FROM marca_vehi");
 $control1->execute();
 $query1 = $control1->fetch();
 
-$control2 = $conex->prepare("SELECT * FROM color LIMIT 0, 7");
+$control2 = $conex->prepare("SELECT * FROM color ");
 $control2->execute();
 $query2 = $control2->fetch();
 
