@@ -12,7 +12,7 @@ if (isset($_GET['pagina'])) {
 }
 $empieza = ($pagina - 1) * $por_pagina;
 $sql1 = $conex->prepare("SELECT * FROM vehiculos 
-                         LEFT JOIN marcas ON vehiculos.id_marca = marcas.id_marca
+                         LEFT JOIN marca_vehi ON vehiculos.id_marca = marca_vehi.id_marca
                          LEFT JOIN color ON vehiculos.id_color = color.id_color 
                          LEFT JOIN tipo_vehiculo ON vehiculos.id_tipo_vehiculo = tipo_vehiculo.id_tipo_vehiculo 
                          LEFT JOIN estados ON vehiculos.estado = estados.id_estados
@@ -79,7 +79,7 @@ $total_paginas = ceil($resul / $por_pagina);
                         <tr>
                             <td><?= $usu['documento'] ?></td>
                             <td><?= $usu['id_placa'] ?></td>
-                            <td><?= $usu['nom_marca'] ?></td>
+                            <td><?= $usu['nom_mar'] ?></td>
                             <td><?= $usu['nom_color'] ?></td>
                             <td><?= $usu['nom_vehiculo'] ?></td>
                             <td><?= $usu['nom_estado'] ?></td>
