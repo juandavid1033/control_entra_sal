@@ -54,8 +54,8 @@ function generarPDF($resultado)
             <thead>
                 <tr>
                     <th>Documento</th>
-                    <th>Codigo de barras</th>
                     <th>Nombre</th>
+                    <th>Código de Barras</th>
                 </tr>
             </thead>
             <tbody>";
@@ -74,8 +74,8 @@ function generarPDF($resultado)
 
         $html .= "<tr>";
         $html .= "<td>{$row['documento']}</td>";
-        $html .= "<td>{$barcodeImg}</td>";
         $html .= "<td>{$row['nombres']}</td>";
+        $html .= "<td>{$barcodeImg}</td>";
         $html .= "</tr>";
     }
     $html .= "</tbody></table></body></html>";
@@ -98,11 +98,10 @@ if (isset($_GET['pagina'])) {
     $pagina = 1;
 }
 $empieza = ($pagina - 1) * $por_pagina;
-$sql = $conex->prepare("SELECT * FROM usuario  WHERE id_rol = 3 ORDER BY documento LIMIT $empieza, $por_pagina");
+$sql = $conex->prepare("SELECT * FROM usuario WHERE id_rol = 3 ORDER BY documento LIMIT $empieza, $por_pagina");
 $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 // Llamar a la función para generar el archivo PDF
 generarPDF($resultado);
 ?>
-
