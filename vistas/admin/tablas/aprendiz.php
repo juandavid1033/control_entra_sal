@@ -56,8 +56,8 @@ $total_paginas = ceil($total_registros / $por_pagina);
             <thead class="table-primary">
                 <tr>
                     <th>Documento</th>
-                    <th>Codigo de barras</th>
                     <th>Nombre</th>
+                    <th>Codigo de barras</th>
                     <th>Correo</th>
                     <th>Estado</th>
                     <th colspan="2" class="text-center">Cambiar estado</th>
@@ -77,8 +77,8 @@ $total_paginas = ceil($total_registros / $por_pagina);
                     // Muestra la imagen del código de barras
                     echo "<tr>";
                     echo "<td>" . $usu['documento'] . "</td>";
-                    echo "<td><img src='data:image/png;base64," . base64_encode($codigo_imagen) . "' alt='Código de barras'></td>";
                     echo "<td>" . $usu['nombres'] . "</td>";
+                    echo "<td><img src='data:image/png;base64," . base64_encode($codigo_imagen) . "' alt='Código de barras'></td>";
                     echo "<td>" . $usu['correo'] . "</td>";
                     echo "<td>" . $usu['nom_estado'] . "</td>";
                     echo "<td>
