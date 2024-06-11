@@ -62,7 +62,7 @@ function generarPDF($resultado)
         $html .= "<tr>
                     <td>{$row_data['documento']}</td>
                     <td>{$row_data['id_placa']}</td>
-                    <td>{$row_data['nom_marca']}</td>
+                    <td>{$row_data['nom_mar']}</td>
                     <td>{$row_data['nom_color']}</td>
                     <td>{$row_data['nom_vehiculo']}</td>
                     <td>{$row_data['nom_estado']}</td>
@@ -93,11 +93,12 @@ if (isset($_GET['pagina'])) {
 }
 $empieza = ($pagina - 1) * $por_pagina;
 $sql1 = $conex->prepare("SELECT * FROM vehiculos 
-                         LEFT JOIN marcas ON vehiculos.id_marca = marcas.id_marca
+                         LEFT JOIN marca_vehi ON vehiculos.id_marca = marca_vehi.id_marca
                          LEFT JOIN color ON vehiculos.id_color = color.id_color 
                          LEFT JOIN tipo_vehiculo ON vehiculos.id_tipo_vehiculo = tipo_vehiculo.id_tipo_vehiculo 
                          LEFT JOIN estados ON vehiculos.estado = estados.id_estados
                          ORDER BY documento LIMIT $empieza, $por_pagina");
+
 $sql1->execute();
 $resultado1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
 
