@@ -3,15 +3,14 @@ require_once ("../../../db/conexion.php");
 $daba = new Database();
 $conex = $daba->conectar();
 
-$control2 = $conex->prepare("SELECT * FROM usuario WHERE id_rol >=3");
+$control2 = $conex->prepare("SELECT u.documento, u.nombres, r.nom_rol FROM usuario u INNER JOIN rol r ON u.id_rol = r.id_rol WHERE u.id_rol >=3");
 $control2->execute();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,6 +33,13 @@ $control2->execute();
 
     <!-- direccion para que funcione solo numero -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+        .custom-link {
+            color: white;
+            font-size: 1.1em;
+        }
+    </style>
 
 </head>
 
@@ -62,7 +68,7 @@ $control2->execute();
                                             <?php while ($query2 = $control2->fetch()): ?>
                                                 <option value="<?php echo $query2['documento']; ?>">
                                                     <?php echo $query2['documento']; ?> -
-                                                    <?php echo $query2['nombres']; ?>
+                                                    <?php echo $query2['nombres']; ?> (<?php echo $query2['nom_rol']; ?>)
                                                 </option>
                                             <?php endwhile; ?>
                                         </select>
@@ -76,10 +82,14 @@ $control2->execute();
                                         </select>
                                     </div>
                                 </div>
-                                <input type="submit" style="margin-top:10px;" class="btn btn-primary  btn-block" name="Suscribir">
+                                <input type="submit" style="margin-top:10px;" class="btn btn-primary btn-block" name="Suscribir">
                                 <!-- Puedes eliminar el campo oculto para 'validar' ya que no parece ser necesario -->
                             </form>
-
+                            <div class="text-center mt-4">
+                                <a class="custom-link" href="../crear/dispositivo.php">Dispositivo</a>
+                                <span style="color: white;"> | </span>
+                                <a class="custom-link" href="../crear/vehiculo.php">Vehículos</a>
+                            </div>
                             <hr>
                         </div>
                     </div>
@@ -101,3 +111,4 @@ $control2->execute();
 </body>
 
 </html>
+
