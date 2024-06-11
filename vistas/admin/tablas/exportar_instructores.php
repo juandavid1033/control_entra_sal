@@ -56,8 +56,8 @@ $html = "<html>
         <thead>
             <tr>
                 <th>Documento</th>
-                <th>Código de Barras</th>
                 <th>Nombre</th>
+                <th>Código de Barras</th>
             </tr>
         </thead>
         <tbody>";
@@ -76,8 +76,8 @@ foreach ($resultado1 as $row) {
 
     $html .= "<tr>";
     $html .= "<td>{$row['documento']}</td>";
-    $html .= "<td>{$barcodeImg}</td>";
     $html .= "<td>{$row['nombres']}</td>";
+    $html .= "<td>{$barcodeImg}</td>";
     $html .= "</tr>";
 }
 
