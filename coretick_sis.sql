@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-06-2024 a las 23:17:33
+-- Tiempo de generación: 11-06-2024 a las 15:21:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -37,18 +37,13 @@ CREATE TABLE `color` (
 --
 
 INSERT INTO `color` (`id_color`, `nom_color`) VALUES
-(1, 'blanco'),
-(2, 'negro'),
-(3, 'verde'),
-(4, 'rosado'),
-(5, 'amarillo'),
-(6, 'azul'),
-(7, 'rojo'),
-(8, 'morado'),
-(9, 'negro mate'),
-(10, 'negro'),
-(11, 'gris mate'),
-(12, 'gris ');
+(13, 'verde'),
+(14, 'azul'),
+(15, 'blanco'),
+(16, 'lila'),
+(17, 'celeste'),
+(18, 'rolo'),
+(19, 'santo');
 
 -- --------------------------------------------------------
 
@@ -158,23 +153,19 @@ CREATE TABLE `marcas` (
 --
 
 INSERT INTO `marcas` (`id_marca`, `nom_marca`) VALUES
-(1, 'audi'),
-(2, 'chevrolet'),
-(3, 'mazda'),
-(4, 'toyota'),
-(5, 'renault'),
-(6, 'bmw'),
-(7, 'subaru'),
-(8, 'hyundai'),
-(9, 'honda'),
-(10, 'ford'),
-(11, 'HP'),
-(12, 'LENOVO'),
-(13, 'ASUS'),
-(14, 'ACER'),
-(15, 'MSI'),
-(16, 'APPLE'),
-(17, 'HUAWEI');
+(18, 'asus'),
+(19, 'hp');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `marca_vehi`
+--
+
+CREATE TABLE `marca_vehi` (
+  `id_marca` int(11) NOT NULL,
+  `nom_mar` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -214,7 +205,9 @@ CREATE TABLE `tipo_dispositivo` (
 --
 
 INSERT INTO `tipo_dispositivo` (`id_tipo_dispositivo`, `nom_dispositivo`) VALUES
-(1, 'poratil');
+(1, 'aaa'),
+(2, 'portatil'),
+(3, 'computador');
 
 -- --------------------------------------------------------
 
@@ -271,7 +264,9 @@ CREATE TABLE `tipo_vehiculo` (
 
 INSERT INTO `tipo_vehiculo` (`id_tipo_vehiculo`, `nom_vehiculo`) VALUES
 (1, 'automovil'),
-(2, 'moto');
+(2, 'moto'),
+(3, 'cicla'),
+(4, 'a');
 
 -- --------------------------------------------------------
 
@@ -383,6 +378,12 @@ ALTER TABLE `marcas`
   ADD PRIMARY KEY (`id_marca`);
 
 --
+-- Indices de la tabla `marca_vehi`
+--
+ALTER TABLE `marca_vehi`
+  ADD PRIMARY KEY (`id_marca`);
+
+--
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
@@ -445,7 +446,7 @@ ALTER TABLE `vehiculos`
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `id_color` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_color` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `entrada_salidas`
@@ -463,13 +464,25 @@ ALTER TABLE `estados`
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id_marca` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_marca` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `marca_vehi`
+--
+ALTER TABLE `marca_vehi`
+  MODIFY `id_marca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
   MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_dispositivo`
+--
+ALTER TABLE `tipo_dispositivo`
+  MODIFY `id_tipo_dispositivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_documento`
@@ -487,7 +500,7 @@ ALTER TABLE `tipo_entrada`
 -- AUTO_INCREMENT de la tabla `tipo_vehiculo`
 --
 ALTER TABLE `tipo_vehiculo`
-  MODIFY `id_tipo_vehiculo` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_tipo_vehiculo` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `trigger`
