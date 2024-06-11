@@ -154,49 +154,38 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             <label>Marca
                                                 <a href="./marca_vehi.php" class="link-yellow">Crear</a>
                                             </label>
-                                            <select name="marca_vehi" class="form-control form-control-user"
-                                                id="exampleFirstName" required>
+                                            <select name="marca" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php
-                                                do {
-                                                    ?>
-                                                    <option value="<?php echo ($query1['id_marca']) ?>"> <?php echo ($query1['nom_mar']) ?> </option>
-                                                    <?php
-                                                } while ($query1 = $control1->fetch());
-                                                ?>
+                                                <?php while ($query1 = $control1->fetch()): ?>
+                                                    <option value="<?php echo $query1['id_marca']; ?>"><?php echo $query1['nom_mar']; ?></option>
+                                                <?php endwhile; ?>
                                             </select>
+
                                         </div>
                                         <div class="col-sm-6  mb-3 mb-sm-2">
                                             <label>Color del Vehiculo
                                                 <a href="./cor_veh.php" class="link-yellow">Crear</a>
                                             </label>
-                                            <select name="cor_veh" class="form-control form-control-user"
-                                                id="exampleFirstName" required>
+                                            <select name="color" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php
-                                                do {
-                                                    ?>
-                                                    <option value="<?php echo ($query2['id_color']) ?>"> <?php echo ($query2['nom_color']) ?> </option>
-                                                    <?php
-                                                } while ($query2 = $control2->fetch());
-                                                ?>
+                                                <?php while ($query2 = $control2->fetch()): ?>
+                                                    <option value="<?php echo $query2['id_color']; ?>"><?php echo $query2['nom_color']; ?></option>
+                                                <?php endwhile; ?>
                                             </select>
+
                                         </div>
                                         <div class="col-sm-6  mb-3 mb-sm-2">
                                             <label>Tipo del Vehiculo
                                                 <a href="./tipo_vehic.php" class="link-yellow">Crear</a>
                                             </label>
-                                            <select name="tipovehiculo" class="form-control form-control-user"
-                                                id="exampleFirstName" required>
+                                            <select name="tipovehiculo" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php
-                                                do {
-                                                    ?>
-                                                    <option value="<?php echo ($query['id_tipo_vehiculo']) ?>"> <?php echo ($query['nom_vehiculo']) ?> </option>
-                                                    <?php
-                                                } while ($query = $control->fetch());
-                                                ?>
+                                                <?php while ($query = $control->fetch()): ?>
+                                                    <option value="<?php echo $query['id_tipo_vehiculo']; ?>"><?php echo $query['nom_vehiculo']; ?></option>
+                                                <?php endwhile; ?>
                                             </select>
+
+
                                         </div>
 
                                           
