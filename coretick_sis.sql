@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-06-2024 a las 15:21:56
+-- Tiempo de generación: 11-06-2024 a las 17:05:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,19 +31,6 @@ CREATE TABLE `color` (
   `id_color` int(10) NOT NULL,
   `nom_color` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `color`
---
-
-INSERT INTO `color` (`id_color`, `nom_color`) VALUES
-(13, 'verde'),
-(14, 'azul'),
-(15, 'blanco'),
-(16, 'lila'),
-(17, 'celeste'),
-(18, 'rolo'),
-(19, 'santo');
 
 -- --------------------------------------------------------
 
@@ -135,7 +122,8 @@ CREATE TABLE `licencias` (
 --
 
 INSERT INTO `licencias` (`licencia`, `id_estado`, `fecha`, `fecha_fin`, `nit_empresa`) VALUES
-('664ca9e1698a1', 1, '2024-05-21 09:04:17', '2026-05-21 09:04:17', 1234567891);
+('664ca9e1698a1', 1, '2024-05-21 09:04:17', '2026-05-21 09:04:17', 1234567891),
+('666855b9b89e1', 1, '2024-06-11 08:48:41', '2026-06-11 08:48:41', 1234512345);
 
 -- --------------------------------------------------------
 
@@ -147,14 +135,6 @@ CREATE TABLE `marcas` (
   `id_marca` int(10) NOT NULL,
   `nom_marca` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `marcas`
---
-
-INSERT INTO `marcas` (`id_marca`, `nom_marca`) VALUES
-(18, 'asus'),
-(19, 'hp');
 
 -- --------------------------------------------------------
 
@@ -199,15 +179,6 @@ CREATE TABLE `tipo_dispositivo` (
   `id_tipo_dispositivo` int(11) NOT NULL,
   `nom_dispositivo` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tipo_dispositivo`
---
-
-INSERT INTO `tipo_dispositivo` (`id_tipo_dispositivo`, `nom_dispositivo`) VALUES
-(1, 'aaa'),
-(2, 'portatil'),
-(3, 'computador');
 
 -- --------------------------------------------------------
 
