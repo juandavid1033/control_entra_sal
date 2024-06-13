@@ -1,4 +1,3 @@
-
 <?php
 require_once("../../../db/conexion.php");
 $daba = new Database();
@@ -16,30 +15,28 @@ $control_documentos->execute(); // Ejecutar la consulta
 // Verificar si hay resultados
 if ($control_documentos->rowCount() > 0) {
     // Recorrer los resultados y mostrarlos en el select
-    do {
-        $usuarios[] = $control_documentos->fetch(); // Agregar cada resultado al arreglo $usuarios
-    } while ($control_documentos->fetch());
+    $usuarios = $control_documentos->fetchAll();
 } else {
     // Manejar el caso donde no hay resultados
     $usuarios = []; // Inicializar $usuarios como un arreglo vacío
 }
 
-$control = $conex->prepare("SELECT * FROM tipo_vehiculo ");
-$control->execute();
-$query = $control->fetch();
+$control_tipos = $conex->prepare("SELECT * FROM tipo_vehiculo ");
+$control_tipos->execute();
+$tipos_vehiculo = $control_tipos->fetchAll();
 
-$control1 = $conex->prepare("SELECT * FROM marca_vehi"); 
-$control1->execute();
-$query1 = $control1->fetch();
+$control_marcas = $conex->prepare("SELECT * FROM marca_vehi"); 
+$control_marcas->execute();
+$marcas_vehiculo = $control_marcas->fetchAll();
 
-$control2 = $conex->prepare("SELECT * FROM color ");
-$control2->execute();
-$query2 = $control2->fetch();
+$control_colores = $conex->prepare("SELECT * FROM color ");
+$control_colores->execute();
+$colores_vehiculo = $control_colores->fetchAll();
 
 ?>
 
 <?php
-if (isset($_POST["validar_V"]) == "cli") {
+if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
     $cedula = $_POST['documento'];
     $placa = $_POST['placa'];
     $marca = $_POST['marca'];
@@ -57,18 +54,18 @@ if (isset($_POST["validar_V"]) == "cli") {
     if ($cedula == "" || $placa == "" || $marca == "" || $color == ""  || $tipovehiculo == "" ) {
 
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-        echo '<script>window.location="vehiculo.php"</script>';
+        
     } else if ($queryi) {
         echo '<script>alert ("El Vehiculo YA EXISTEN // CAMBIELO//");</script>';
-        echo 'script>windows.location="vehiculo.php"</script>';
+        
     } elseif ($queryi4) {
         $insertsql = $conex->prepare("INSERT INTO vehiculos(documento,id_placa,id_marca,id_color,id_tipo_vehiculo) VALUES (?,?,?,?,?)");
         $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo]);
         echo '<script>alert ("Vehiculo Creado exitosamente, Gracias");</script>';
-        echo '<script>window.location="./vehiculo.php"</script>';
+        
     } else {
         echo '<script>alert ("El usuario no esta registrado // asi que no puede asignar este vehiculo ");</script>';
-        echo '<script>window.location="./vehiculo.php"</script>';
+        
 
     }
 }
@@ -156,9 +153,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="marca" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query1 = $control1->fetch()): ?>
-                                                    <option value="<?php echo $query1['id_marca']; ?>"><?php echo $query1['nom_mar']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($marcas_vehiculo as $marca): ?>
+                                                    <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nom_mar']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
                                         </div>
@@ -168,9 +165,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="color" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query2 = $control2->fetch()): ?>
-                                                    <option value="<?php echo $query2['id_color']; ?>"><?php echo $query2['nom_color']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($colores_vehiculo as $color): ?>
+                                                    <option value="<?php echo $color['id_color']; ?>"><?php echo $color['nom_color']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
                                         </div>
@@ -180,133 +177,16 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="tipovehiculo" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query = $control->fetch()): ?>
-                                                    <option value="<?php echo $query['id_tipo_vehiculo']; ?>"><?php echo $query['nom_vehiculo']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($tipos_vehiculo as $tipo): ?>
+                                                    <option value="<?php echo $tipo['id_tipo_vehiculo']; ?>"><?php echo $tipo['nom_vehiculo']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
 
                                         </div>
-
-                                          
-
-                                        <!-- SOLO NUMERO,LONGITUD -->
-                                        <script>
-                                            function maxlengthNumber(obj) {
-                                                console.log(obj.value);
-                                                if (obj.value.length > obj.maxLength) {
-                                                    obj.value = obj.value.slice(0, obj.maxLength);
-                                                }
-                                            }
-                                        </script>
-
-                                        <!-- LONGITUD DE LETRA -->
-                                        <script>
-                                            function validaletras(obj) {
-                                                console.log(obj.value);
-                                                if (obj.value.length > obj.maxLength) {
-                                                    obj.value = obj.value.slice(0, obj.maxLength);
-                                                }
-                                            }
-                                        </script>
-
-                                        <!-- SOLO LETRA (ESPACIO DE LETRAS SE HACE EN LETRAS) -->
-                                        <script>
-                                            function sololetras(e) {
-                                                key = e.keyCode || e.which;
-
-                                                teclado = String.fromCharCode(key).toLowerCase();
-
-                                                letras = "qwertyuiopasdfghjklñzxcvbnm ";
-
-                                                especiales = "8-37-38-46-164-46";
-
-                                                teclado_especial = false;
-
-                                                for (var i in especiales) {
-                                                    if (key == especiales[i]) {
-                                                        teclado_especial = true;
-                                                        break;
-                                                    }
-                                                }
-
-                                                if (letras.indexOf(teclado) == -1 && !teclado_especial) {
-                                                    return false;
-                                                    a
-                                                }
-                                            }
-                                        </script>
-
-                                        <!-- SOLO NUMEROS () -->
-                                        <script>
-                                            function solonumeros(e) {
-                                                key = e.keyCode || e.which;
-
-                                                teclado = String.fromCharCode(key).toLowerCase();
-
-                                                letras = "0123456789.";
-
-                                                especiales = "8-37-38-46-164-46";
-
-                                                teclado_especial = false;
-
-                                                for (var i in especiales) {
-                                                    if (key == especiales[i]) {
-                                                        teclado_especial = true;
-                                                        break;
-                                                    }
-                                                }
-
-                                                if (letras.indexOf(teclado) == -1 && !teclado_especial) {
-                                                    return false;
-                                                    a
-                                                }
-                                            }
-                                        </script>
-
-                                        <!-- SOLO NUMERO -->
-                                        <script>
-                                            $(function() {
-                                            $('input[type=number]').keypress(function(key) {
-                                                if(key.charCode < 48 || key.charCode > 57) return false;
-                                            });
-                                        });
-
-                                        </script>
-                                        <script>
-                                            document.addEventListener("DOMContentLoaded", function() {
-                                                // Obtenemos el formulario por su ID
-                                                var form = document.getElementById("formVehiculo");
-
-                                                // Agregamos un event listener para el evento submit del formulario
-                                                form.addEventListener("submit", function(event) {
-                                                    var placaInput = document.getElementById("placa");
-                                                    var placaValue = placaInput.value;
-
-                                                    // Expresión regular para validar la placa
-                                                    var regex = /^[A-Za-z0-9]{0,6}$/;
-
-                                                    // Si la placa no cumple con la expresión regular
-                                                    if (!regex.test(placaValue)) {
-                                                        // Mostramos un mensaje de error
-                                                        document.getElementById("placaHelp").innerText = "La placa debe contener letras y números, con un máximo de 6 caracteres.";
-                                                        // Evitamos que el formulario se envíe
-                                                        event.preventDefault();
-                                                    } else {
-                                                        // Si la placa es válida, limpiamos el mensaje de error
-                                                        document.getElementById("placaHelp").innerText = "";
-                                                    }
-                                                });
-                                            });
-                                        </script>
-
-
-
-
-
                                         <input type="submit" style="margin-top:10px;"
-                                            class="btn btn-primary btn-user btn-block" name="Suscribir">
-                                        <input type="hidden" name="validar_V" value="user">
+                                            class="btn btn-primary btn-user btn-block" name="validar_V" value="cli">
+                                        <input type="hidden" name="validar_V" value="cli">
                                 </form>
                                 <hr>
                             </div>
