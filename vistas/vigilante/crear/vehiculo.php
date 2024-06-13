@@ -36,7 +36,7 @@ $colores_vehiculo = $control_colores->fetchAll();
 ?>
 
 <?php
-if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
+if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "envia") {
     $cedula = $_POST['documento'];
     $placa = $_POST['placa'];
     $marca = $_POST['marca'];
@@ -185,8 +185,8 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
 
                                         </div>
                                         <input type="submit" style="margin-top:10px;"
-                                            class="btn btn-primary btn-user btn-block" name="validar_V" value="cli">
-                                        <input type="hidden" name="validar_V" value="cli">
+                                            class="btn btn-primary btn-user btn-block" name="validar_V" value="envia">
+                                        <input type="hidden" name="validar_V" value="envia">
                                 </form>
                                 <hr>
                             </div>
@@ -228,3 +228,5 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
 </body>
 
 </html>
+
+ 
