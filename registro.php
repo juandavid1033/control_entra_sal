@@ -11,7 +11,7 @@ $control2 = $conexion->prepare("SELECT * From rol LIMIT 2, 7");
 $control2->execute();
 $query2 = $control2->fetch();
 
-$control6 = $conexion->prepare("SELECT * From empresas where nit_empresa >= 1");
+$control6 = $conexion->prepare("SELECT * From empresas where nit_empresa = 1");
 $control6->execute();
 $query6 = $control6->fetch();
 
