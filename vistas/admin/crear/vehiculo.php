@@ -21,22 +21,22 @@ if ($control_documentos->rowCount() > 0) {
     $usuarios = []; // Inicializar $usuarios como un arreglo vacío
 }
 
-$control = $conex->prepare("SELECT * FROM tipo_vehiculo ");
-$control->execute();
-$tipos_vehiculo = $control->fetchAll();
+$control_tipos = $conex->prepare("SELECT * FROM tipo_vehiculo ");
+$control_tipos->execute();
+$tipos_vehiculo = $control_tipos->fetchAll();
 
-$control1 = $conex->prepare("SELECT * FROM marca_vehi"); 
-$control1->execute();
-$marcas_vehiculo = $control1->fetchAll();
+$control_marcas = $conex->prepare("SELECT * FROM marca_vehi"); 
+$control_marcas->execute();
+$marcas_vehiculo = $control_marcas->fetchAll();
 
-$control2 = $conex->prepare("SELECT * FROM color ");
-$control2->execute();
-$colores_vehiculo = $control2->fetchAll();
+$control_colores = $conex->prepare("SELECT * FROM color ");
+$control_colores->execute();
+$colores_vehiculo = $control_colores->fetchAll();
 
 ?>
 
 <?php
-if (isset($_POST["validar_V"]) == "cli") {
+if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
     $cedula = $_POST['documento'];
     $placa = $_POST['placa'];
     $marca = $_POST['marca'];
@@ -57,7 +57,7 @@ if (isset($_POST["validar_V"]) == "cli") {
         echo '<script>window.location="vehiculo.php"</script>';
     } else if ($queryi) {
         echo '<script>alert ("El Vehiculo YA EXISTEN // CAMBIELO//");</script>';
-        echo 'script>windows.location="vehiculo.php"</script>';
+        echo '<script>window.location="vehiculo.php"</script>';
     } elseif ($queryi4) {
         $insertsql = $conex->prepare("INSERT INTO vehiculos(documento,id_placa,id_marca,id_color,id_tipo_vehiculo) VALUES (?,?,?,?,?)");
         $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo]);
