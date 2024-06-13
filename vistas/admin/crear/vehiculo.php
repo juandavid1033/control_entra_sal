@@ -54,18 +54,18 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
     if ($cedula == "" || $placa == "" || $marca == "" || $color == ""  || $tipovehiculo == "" ) {
 
         echo '<script>alert ("EXISTEN DATOS VACIOS");</script>';
-        echo '<script>window.location="vehiculo.php"</script>';
+        
     } else if ($queryi) {
         echo '<script>alert ("El Vehiculo YA EXISTEN // CAMBIELO//");</script>';
-        echo '<script>window.location="vehiculo.php"</script>';
+        
     } elseif ($queryi4) {
         $insertsql = $conex->prepare("INSERT INTO vehiculos(documento,id_placa,id_marca,id_color,id_tipo_vehiculo) VALUES (?,?,?,?,?)");
         $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo]);
         echo '<script>alert ("Vehiculo Creado exitosamente, Gracias");</script>';
-        echo '<script>window.location="./vehiculo.php"</script>';
+        
     } else {
         echo '<script>alert ("El usuario no esta registrado // asi que no puede asignar este vehiculo ");</script>';
-        echo '<script>window.location="./vehiculo.php"</script>';
+        
 
     }
 }
