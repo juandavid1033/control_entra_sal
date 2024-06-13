@@ -57,13 +57,13 @@ if ($total_paginas == 0) {
     </a>
 
     <br>
-    <a class="btn btn-success" href="../excel/excel_clientes.php" style="margin-left: 90%; margin-top:0%;">
+    <a class="btn btn-success" href="excelusu.php" style="margin-left: 90%; margin-top:0%;">
         <i class="bi bi-file-earmark-excel" style="padding:10px 10px 10px 10px; border-radius:10px; color:#fff; font-size:15px; background-color:#198754;">
             EXCEL
         </i>
     </a>
     <br>
-    <a class="btn btn-success" href="../reporte/repor_cliente.php" style="margin-left: 88%; margin-top:1%;">
+    <a class="btn btn-success" href="reporte_usu.php" style="margin-left: 88%; margin-top:1%;">
         <i class="bi bi-printer" style="padding:10px 16px 10px 16px; border-radius:10px; color:#fff; font-size:15px; background-color:#E00000;">
             IMPRIMIR
         </i>
