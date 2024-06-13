@@ -1,4 +1,3 @@
-
 <?php
 require_once("../../../db/conexion.php");
 $daba = new Database();
@@ -16,9 +15,7 @@ $control_documentos->execute(); // Ejecutar la consulta
 // Verificar si hay resultados
 if ($control_documentos->rowCount() > 0) {
     // Recorrer los resultados y mostrarlos en el select
-    do {
-        $usuarios[] = $control_documentos->fetch(); // Agregar cada resultado al arreglo $usuarios
-    } while ($control_documentos->fetch());
+    $usuarios = $control_documentos->fetchAll();
 } else {
     // Manejar el caso donde no hay resultados
     $usuarios = []; // Inicializar $usuarios como un arreglo vacío
@@ -26,15 +23,15 @@ if ($control_documentos->rowCount() > 0) {
 
 $control = $conex->prepare("SELECT * FROM tipo_vehiculo ");
 $control->execute();
-$query = $control->fetch();
+$tipos_vehiculo = $control->fetchAll();
 
 $control1 = $conex->prepare("SELECT * FROM marca_vehi"); 
 $control1->execute();
-$query1 = $control1->fetch();
+$marcas_vehiculo = $control1->fetchAll();
 
 $control2 = $conex->prepare("SELECT * FROM color ");
 $control2->execute();
-$query2 = $control2->fetch();
+$colores_vehiculo = $control2->fetchAll();
 
 ?>
 
@@ -156,9 +153,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="marca" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query1 = $control1->fetch()): ?>
-                                                    <option value="<?php echo $query1['id_marca']; ?>"><?php echo $query1['nom_mar']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($marcas_vehiculo as $marca): ?>
+                                                    <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nom_mar']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
                                         </div>
@@ -168,9 +165,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="color" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query2 = $control2->fetch()): ?>
-                                                    <option value="<?php echo $query2['id_color']; ?>"><?php echo $query2['nom_color']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($colores_vehiculo as $color): ?>
+                                                    <option value="<?php echo $color['id_color']; ?>"><?php echo $color['nom_color']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
                                         </div>
@@ -180,9 +177,9 @@ if (isset($_POST["validar_V"]) == "cli") {
                                             </label>
                                             <select name="tipovehiculo" class="form-control form-control-user" id="exampleFirstName" required>
                                                 <option value="">Elegir</option>
-                                                <?php while ($query = $control->fetch()): ?>
-                                                    <option value="<?php echo $query['id_tipo_vehiculo']; ?>"><?php echo $query['nom_vehiculo']; ?></option>
-                                                <?php endwhile; ?>
+                                                <?php foreach ($tipos_vehiculo as $tipo): ?>
+                                                    <option value="<?php echo $tipo['id_tipo_vehiculo']; ?>"><?php echo $tipo['nom_vehiculo']; ?></option>
+                                                <?php endforeach; ?>
                                             </select>
 
 
