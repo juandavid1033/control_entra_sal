@@ -36,7 +36,7 @@ $colores_vehiculo = $control_colores->fetchAll();
 ?>
 
 <?php
-if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
+if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "envia") {
     $cedula = $_POST['documento'];
     $placa = $_POST['placa'];
     $marca = $_POST['marca'];
@@ -59,9 +59,8 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
         echo '<script>alert ("El Vehiculo YA EXISTEN // CAMBIELO//");</script>';
         
     } elseif ($queryi4) {
-        $insertsql = $conex->prepare("INSERT INTO vehiculos(documento,id_placa,id_marca,id_color,id_tipo_vehiculo,estado) VALUES (?,?,?,?,?,?)");
-        $estado = "activo"; // Definir el estado como activo
-        $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo, $estado]);
+        $insertsql = $conex->prepare("INSERT INTO vehiculos(documento,id_placa,id_marca,id_color,id_tipo_vehiculo) VALUES (?,?,?,?,?)");
+        $insertsql->execute([$cedula, $placa, $marca,$color, $tipovehiculo]);
         echo '<script>alert ("Vehiculo Creado exitosamente, Gracias");</script>';
         
     } else {
@@ -186,8 +185,8 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
 
                                         </div>
                                         <input type="submit" style="margin-top:10px;"
-                                            class="btn btn-primary btn-user btn-block" name="validar_V" value="cli">
-                                        <input type="hidden" name="validar_V" value="cli">
+                                            class="btn btn-primary btn-user btn-block" name="validar_V" value="envia">
+                                        <input type="hidden" name="validar_V" value="envia">
                                 </form>
                                 <hr>
                             </div>
@@ -229,4 +228,5 @@ if (isset($_POST["validar_V"]) && $_POST["validar_V"] === "cli") {
 </body>
 
 </html>
+
  
